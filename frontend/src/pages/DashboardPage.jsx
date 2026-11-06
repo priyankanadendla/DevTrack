@@ -40,7 +40,13 @@ export default function DashboardPage() {
           dashboardAPI.getActivities(8),
         ]);
         setStats(statsRes.data);
-        setActivities(actRes.data);
+        setActivities(
+  Array.isArray(actRes.data)
+    ? actRes.data
+    : Array.isArray(actRes.data?.activities)
+      ? actRes.data.activities
+      : []
+);
       } catch (err) {
         console.error('Dashboard error:', err);
       } finally {

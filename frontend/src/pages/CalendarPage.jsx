@@ -20,7 +20,13 @@ export default function CalendarPage() {
           dashboardAPI.getActivities(25),
         ]);
         setCalendarData(calRes.data || {});
-        setActivities(actRes.data || []);
+        setActivities(
+  Array.isArray(actRes.data)
+    ? actRes.data
+    : Array.isArray(actRes.data?.activities)
+      ? actRes.data.activities
+      : []
+);
       } catch (err) {
         toast.error('Failed to load activity calendar');
       } finally {
