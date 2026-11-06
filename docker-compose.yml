@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: devtrack-postgres
+    environment:
+      POSTGRES_DB: devtrack
+      POSTGRES_USER: devtrack_user
+      POSTGRES_PASSWORD: devtrack_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - devtrack-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devtrack_user -d devtrack"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  devtrack-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
